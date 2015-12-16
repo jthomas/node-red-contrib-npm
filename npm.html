@@ -1,0 +1,90 @@
+<script type="text/javascript">
+    RED.nodes.registerType('npm',{
+        category: 'function',
+        color: '#CB3837',
+        defaults: {
+          name: {value:""},
+          func: {value:"// NPM module exposed as variable, npm_module\nreturn npm_module(msg.payload);"},
+          npm_module: {value: ""},
+          module_style: {value: "cstr"},
+          function_name: {value: ""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "npm.png",
+        label: function() {
+            return this.name||"npm";
+        }, 
+        // TODO: On change, focus and hide.
+        oneditprepare: function () {
+          $('#node-input-module_style').change(function () {
+            var value = $('#node-input-module_style').val()
+            $('.form-row.toggle').hide()
+            if (value === 'function' || value === 'custom') {
+              $('.form-row.' + value).show()
+            }
+          })
+
+          this.editor = RED.editor.createEditor({
+            id: 'node-input-func-editor',
+            mode: 'ace/mode/javascript',
+            value: $("#node-input-func").val()
+          });
+          this.editor.focus();
+        },
+        oneditsave: function() {
+            var annot = this.editor.getSession().getAnnotations();
+            this.noerr = 0;
+            $("#node-input-noerr").val(0);
+            for (var k=0; k < annot.length; k++) {
+                //console.log(annot[k].type,":",annot[k].text, "on line", annot[k].row);
+                if (annot[k].type === "error") {
+                    $("#node-input-noerr").val(annot.length);
+                    this.noerr = annot.length;
+                }
+            }
+            $("#node-input-func").val(this.editor.getValue());
+            delete this.editor;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="npm">
+    <style type="text/css">
+    .form-row label {
+      width: 110px;
+    }
+    </style>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-npm_module"><i class="icon-search"></i> NPM Module</label>
+        <input type="text" id="node-input-npm_module" placeholder="NPM Module Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-module_style"><i class="fa fa-file-code-o"></i> Module Style</label>
+        <select type="text" id="node-input-module_style" style="display: inline-block; width: 70%;" >
+            <option value="cstr">Module Constructor</option>
+            <option value="function">Module Function</option>
+            <option value="custom">Custom</option>
+        </select>
+    </div>
+    <div class="form-row toggle function">
+        <label for="node-input-function_name"><i class="icon-tag"></i> Function</label>
+        <input type="text" id="node-input-function_name" placeholder="Function Name">
+    </div>
+    <div class="form-row toggle custom" style="margin-bottom: 0px;">
+        <label for="node-input-func" style="width: 200px;"><i class="fa fa-wrench"></i> Module Invocation</label>
+        <input type="hidden" id="node-input-func" autofocus="autofocus">
+        <input type="hidden" id="node-input-noerr">
+    </div>
+    <div class="form-row toggle custom node-text-editor-row">
+        <div style="height: 250px;" class="node-text-editor" id="node-input-func-editor" ></div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="npm">
+    <p>A meta-node to dynamically expose NPM modules as nodes.</p>
+</script>
