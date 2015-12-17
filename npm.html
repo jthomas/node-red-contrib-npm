@@ -7,6 +7,7 @@
           func: {value:"// NPM module exposed as variable, npm_module\nreturn npm_module(msg.payload);"},
           npm_module: {value: ""},
           module_style: {value: "cstr"},
+          msg_payload: {value: "return_val"},
           function_name: {value: ""}
         },
         inputs:1,
@@ -20,9 +21,7 @@
           $('#node-input-module_style').change(function () {
             var value = $('#node-input-module_style').val()
             $('.form-row.toggle').hide()
-            if (value === 'function' || value === 'custom') {
-              $('.form-row.' + value).show()
-            }
+            $('.form-row.' + value).show()
           })
 
           this.editor = RED.editor.createEditor({
@@ -52,7 +51,11 @@
 <script type="text/x-red" data-template-name="npm">
     <style type="text/css">
     .form-row label {
-      width: 110px;
+      width: 130px;
+    }
+
+    .form-row input {
+      width: 67%;
     }
     </style>
     <div class="form-row">
@@ -75,6 +78,15 @@
         <label for="node-input-function_name"><i class="icon-tag"></i> Function</label>
         <input type="text" id="node-input-function_name" placeholder="Function Name">
     </div>
+    <div class="form-row toggle function cstr">
+        <label for="node-input-msg_payload"><i class="fa fa-file-code-o"></i> Message Payload</label>
+        <select type="text" id="node-input-msg_payload" style="display: inline-block; width: 70%;" >
+            <option value="return_val">Function Return Value</option>
+            <option value="callback">Callback, data as first parameter</option>
+            <option value="callback_error">Callback with Error, data as second parameter</option>
+        </select>
+    </div>
+
     <div class="form-row toggle custom" style="margin-bottom: 0px;">
         <label for="node-input-func" style="width: 200px;"><i class="fa fa-wrench"></i> Module Invocation</label>
         <input type="hidden" id="node-input-func" autofocus="autofocus">
