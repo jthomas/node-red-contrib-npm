@@ -2,18 +2,30 @@
   "name": "node-red-contrib-npm",
   "version": "1.0.0",
   "description": "Node-RED node to dynamically expose NPM modules as nodes.",
-  "main": "npm.js",
+  "main": "npm/npm.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jthomas/node-red-contrib-npm"
+  },
+  "author": "James Thomas <james@jamesthom.as>",
   "license": "MIT",
   "dependencies": {
-    "npm": "^2.14.7"
+    "npm": "^2.14.7",
+    "temp": "^0.8.3"
   },
+  "keywords": [
+    "node-red",
+    "npm",
+    "nodejs",
+    "javascript",
+    "modules"
+  ],
   "node-red": {
     "nodes": {
-      "npm": "npm.js"
+      "npm": "npm/npm.js"
     }
   }
 }

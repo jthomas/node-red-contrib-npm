@@ -1,5 +1,8 @@
 var npm = require('npm')
 var vm = require("vm")
+var temp = require("temp").track()
+var temp_dir = temp.mkdirSync()
+var temp_node_modules_path = temp_dir + '/node_modules/'
 
 module.exports = function (RED) {
   var installed_modules = {}
@@ -11,10 +14,10 @@ module.exports = function (RED) {
 
     if (config.npm_module) {
       if (installed_modules[config.npm_module]) {
-        npm_module = require(config.npm_module)
+        npm_module = require(temp_node_modules_path + config.npm_module)
       } else {
         node.status({fill:"blue",shape:"dot",text:"installing"});
-        npm.load({prefix: __dirname, progress: false, loglevel: 'silent'}, function (er) {
+        npm.load({prefix: temp_dir, progress: false, loglevel: 'silent'}, function (er) {
           if (er) return node.error(er);
 
           npm.commands.install([config.npm_module], function (er, data) {
@@ -24,7 +27,7 @@ module.exports = function (RED) {
             }
 
             try {
-              npm_module = require(config.npm_module)
+              npm_module = require(temp_node_modules_path + config.npm_module)
               node.status({fill:"green",shape:"dot",text:"ready"});
               setTimeout(node.status.bind(node, {}), 2000)
               node.log('Downloaded and installed NPM module: ' + config.npm_module)

@@ -99,4 +99,8 @@
 
 <script type="text/x-red" data-help-name="npm">
     <p>A meta-node to dynamically expose NPM modules as nodes.</p>
+    <p>NPM Module name must match the registered package identifier from the <a href="http://npmjs.org">NPM Registry</a>.</p>
+    <p>Node can be configured to execute the module constructor, function property or custom setup code to return results.</p>
+    <p>Property (msg.payload) will be passed in as function argument. Response returned as new msg.payload property value.</p>
+    <p>Results from the function execution can be configured to use return value (primitive type or promise) or callback-based operation.</p>
 </script>
