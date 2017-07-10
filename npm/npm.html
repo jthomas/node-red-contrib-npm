@@ -18,10 +18,12 @@
         }, 
         // TODO: On change, focus and hide.
         oneditprepare: function () {
+          that = this
           $('#node-input-module_style').change(function () {
             var value = $('#node-input-module_style').val()
             $('.form-row.toggle').hide()
             $('.form-row.' + value).show()
+            that.editor.resize()
           })
 
           this.editor = RED.editor.createEditor({
