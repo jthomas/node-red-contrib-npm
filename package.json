@@ -13,8 +13,8 @@
   "author": "James Thomas <james@jamesthom.as>",
   "license": "MIT",
   "dependencies": {
-    "npm": "^6.9.0",
-    "temp": "^0.8.3"
+    "npm": "^6.14.1",
+    "temp": "^0.9.1"
   },
   "keywords": [
     "node-red",
