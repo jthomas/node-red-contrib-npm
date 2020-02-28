@@ -1,6 +1,6 @@
 var npm = require('npm')
-var vm = require("vm")
-var temp = require("temp").track()
+var vm = require('vm')
+var temp = require('temp').track()
 var temp_dir = temp.mkdirSync()
 var temp_node_modules_path = temp_dir + '/node_modules/'
 
@@ -16,25 +16,25 @@ module.exports = function (RED) {
       if (installed_modules[config.npm_module]) {
         npm_module = require(temp_node_modules_path + config.npm_module)
       } else {
-        node.status({fill:"blue",shape:"dot",text:"installing"});
+        node.status({fill:'blue',shape:'dot',text:'installing'});
         npm.load({prefix: temp_dir, progress: false, loglevel: 'silent'}, function (er) {
           if (er) return node.error(er);
 
           npm.commands.install([config.npm_module], function (er, data) {
             if (er) {
-              node.status({fill:"red",shape:"dot",text:"failed"});
+              node.status({fill:'red',shape:'dot',text:'failed'});
               return node.error(er)
             }
 
             try {
               npm_module = require(temp_node_modules_path + config.npm_module)
-              node.status({fill:"green",shape:"dot",text:"ready"});
+              node.status({fill:'green',shape:'dot',text:'ready'});
               setTimeout(node.status.bind(node, {}), 2000)
               node.log('Downloaded and installed NPM module: ' + config.npm_module)
               installed_modules[config.npm_module] = true
             } catch (err) {
               node.error(err)
-              node.status({fill:"red",shape:"dot",text:"failed"});
+              node.status({fill:'red',shape:'dot',text:'failed'});
             }
           })
         })
